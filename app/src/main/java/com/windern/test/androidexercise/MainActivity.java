@@ -3,6 +3,7 @@ package com.windern.test.androidexercise;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -17,17 +18,26 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.ll_flow)
     LinearLayout mLlFlow;
 
-    @BindView(R.id.tv_scroll_title1)
-    TextView mTvScrollTitle1;
+    @BindView(R.id.tv_whole_title)
+    View tvWholeTitle;
 
-    @BindView(R.id.tv_flow_title1)
-    TextView mTvFlowTitle1;
+    @BindView(R.id.view_scroll_title1)
+    View mTvScrollTitle1;
 
-    @BindView(R.id.tv_scroll_title2)
-    TextView mTvScrollTitle2;
+    @BindView(R.id.view_flow_title1)
+    View mTvFlowTitle1;
 
-    @BindView(R.id.tv_flow_title2)
-    TextView mTvFlowTitle2;
+    @BindView(R.id.view_scroll_title2)
+    View mTvScrollTitle2;
+
+    @BindView(R.id.view_flow_title2)
+    View mTvFlowTitle2;
+
+    @BindView(R.id.hscroll_flow)
+    HorizontalScrollView hscrollFlow;
+
+    @BindView(R.id.hscroll_content)
+    HorizontalScrollView hscrollContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +52,17 @@ public class MainActivity extends AppCompatActivity {
         mScrollView.setScrollViewListener(new ScrollViewListener() {
             @Override
             public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-                if (y > mTvScrollTitle2.getTop()) {
+                int outWholeTitleScrollY = y - tvWholeTitle.getHeight();
+
+                if (outWholeTitleScrollY > mTvScrollTitle2.getTop()) {
                     mLlFlow.setTop(0);
                     mTvFlowTitle2.setVisibility(View.VISIBLE);
                     mTvFlowTitle1.setVisibility(View.GONE);
-                } else if (y > mTvScrollTitle2.getTop() - mTvScrollTitle1.getHeight()) {
-                    mLlFlow.setTop(mTvScrollTitle2.getTop() - mTvScrollTitle1.getHeight() - y);
+                } else if (outWholeTitleScrollY > mTvScrollTitle2.getTop() - mTvScrollTitle1.getHeight()) {
+                    mLlFlow.setTop(mTvScrollTitle2.getTop() - mTvScrollTitle1.getHeight() - outWholeTitleScrollY);
                     mTvFlowTitle2.setVisibility(View.GONE);
                     mTvFlowTitle1.setVisibility(View.VISIBLE);
-                } else if (y > mTvScrollTitle1.getTop()) {
+                } else if (outWholeTitleScrollY - tvWholeTitle.getTop() > mTvScrollTitle1.getTop()) {
                     mLlFlow.setTop(0);
                     mTvFlowTitle2.setVisibility(View.GONE);
                     mTvFlowTitle1.setVisibility(View.VISIBLE);
